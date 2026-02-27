@@ -92,8 +92,8 @@ set(SOURCES
 )
 
 set(PUBLIC_HEADERS
-  include/libqlucidcamera-cpp/lucid_camera.h
-  include/libqlucidcamera-cpp/lucid_camera_connector.h
+  include/qlucidcamera/lucid_camera.h
+  include/qlucidcamera/lucid_camera_connector.h
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${PUBLIC_HEADERS})
@@ -105,7 +105,7 @@ target_include_directories(${PROJECT_NAME}
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/libqlucidcamera-cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/qlucidcamera
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -155,7 +155,7 @@ if(TARGET qlucidcamera_arena_sdk)
   )
 endif()
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/libqlucidcamera-cpp
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/qlucidcamera
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING PATTERN "*.h"
 )
