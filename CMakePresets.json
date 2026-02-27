@@ -1,0 +1,83 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+  "major": 3,
+  "minor": 16,
+  "patch": 0
+  },
+  "configurePresets": [
+  {
+    "name": "base",
+    "hidden": true,
+    "generator": "Unix Makefiles",
+    "binaryDir": "${sourceDir}/build/${presetName}",
+    "cacheVariables": {
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+    }
+  },
+  {
+    "name": "qt610-debug",
+    "displayName": "Qt 6.10.2 Debug",
+    "description": "Use preset-local QT_ROOT for Qt 6.10.2",
+    "inherits": "base",
+    "environment": {
+    "QT_ROOT": "/home/dev/Qt/6.10.2/gcc_64"
+    },
+    "cacheVariables": {
+    "CMAKE_BUILD_TYPE": "Debug",
+    "CMAKE_PREFIX_PATH": "$env{QT_ROOT}/lib/cmake"
+    }
+  },
+  {
+    "name": "qt610-release",
+    "displayName": "Qt 6.10.2 Release",
+    "description": "Use preset-local QT_ROOT for Qt 6.10.2",
+    "inherits": "base",
+    "environment": {
+    "QT_ROOT": "/home/dev/Qt/6.10.2/gcc_64"
+    },
+    "cacheVariables": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_PREFIX_PATH": "$env{QT_ROOT}/lib/cmake"
+    }
+  },
+  {
+    "name": "qt-env-debug",
+    "displayName": "Qt Env Debug",
+    "description": "Use QT_ROOT from environment",
+    "inherits": "base",
+    "cacheVariables": {
+    "CMAKE_BUILD_TYPE": "Debug",
+    "CMAKE_PREFIX_PATH": "$env{QT_ROOT}/lib/cmake"
+    }
+  },
+  {
+    "name": "qt-env-release",
+    "displayName": "Qt Env Release",
+    "description": "Use QT_ROOT from environment",
+    "inherits": "base",
+    "cacheVariables": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_PREFIX_PATH": "$env{QT_ROOT}/lib/cmake"
+    }
+  }
+  ],
+  "buildPresets": [
+  {
+    "name": "build-qt610-debug",
+    "configurePreset": "qt610-debug"
+  },
+  {
+    "name": "build-qt610-release",
+    "configurePreset": "qt610-release"
+  },
+  {
+    "name": "build-qt-env-debug",
+    "configurePreset": "qt-env-debug"
+  },
+  {
+    "name": "build-qt-env-release",
+    "configurePreset": "qt-env-release"
+  }
+  ]
+}
