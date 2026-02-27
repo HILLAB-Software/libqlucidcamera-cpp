@@ -4,56 +4,6 @@ include(CMakeFindDependencyMacro)
 find_dependency(OpenCV 4.0 REQUIRED)
 find_dependency(Qt6 6.8 REQUIRED COMPONENTS Core Qml Concurrent)
 
-# Arena SDK package name can vary by SDK/CMake integration.
-# Try common package names used by vendor/community packages.
-find_dependency(ArenaSDK QUIET)
-if(NOT ArenaSDK_FOUND)
-  find_dependency(Arena QUIET)
-endif()
-if(NOT ArenaSDK_FOUND AND NOT Arena_FOUND)
-  set(_qlucid_arena_root "$ENV{ARENA_SDK_ROOT}")
-  if(NOT _qlucid_arena_root)
-  set(_qlucid_arena_root "$ENV{ARENA_SDK_DIR}")
-  endif()
-
-  if(_qlucid_arena_root)
-  find_path(_qlucid_arena_hdr
-    NAMES ArenaApi.h
-    PATHS
-    ${_qlucid_arena_root}/include/Arena
-    NO_DEFAULT_PATH
-  )
-  find_library(_qlucid_arena_lib
-    NAMES arena
-    PATHS
-    ${_qlucid_arena_root}/lib64
-    ${_qlucid_arena_root}/lib
-    NO_DEFAULT_PATH
-  )
-  find_library(_qlucid_save_lib
-    NAMES save
-    PATHS
-    ${_qlucid_arena_root}/lib64
-    ${_qlucid_arena_root}/lib
-    NO_DEFAULT_PATH
-  )
-
-  if(_qlucid_arena_hdr AND _qlucid_arena_lib AND _qlucid_save_lib)
-    add_library(qlucidcamera_arena_sdk INTERFACE IMPORTED)
-    set_target_properties(qlucidcamera_arena_sdk PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES
-      "${_qlucid_arena_root}/include;${_qlucid_arena_root}/include/Arena;${_qlucid_arena_root}/include/Save;${_qlucid_arena_root}/GenICam/library/CPP/include"
-    INTERFACE_LINK_LIBRARIES
-      "${_qlucid_arena_lib};${_qlucid_save_lib}"
-    )
-  endif()
-  endif()
-
-  if(NOT TARGET qlucidcamera_arena_sdk)
-  message(FATAL_ERROR "qlucidcamera requires Arena SDK. Could not find package 'ArenaSDK' or 'Arena'. Set ARENA_SDK_ROOT to your SDK root as a fallback.")
-  endif()
-endif()
-
 # Include target configuration
 include("${CMAKE_CURRENT_LIST_DIR}/qlucidcameraTargets.cmake")
 

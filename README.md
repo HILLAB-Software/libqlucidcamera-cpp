@@ -79,6 +79,30 @@ Installed CMake package files are generated under:
 - `lib/cmake/qlucidcamera/qlucidcameraConfig.cmake`
 - `lib/cmake/qlucidcamera/qlucidcameraTargets.cmake`
 
+## Using from another CMake project
+
+In a consumer project's `CMakeLists.txt`:
+
+```cmake
+find_package(qlucidcamera CONFIG REQUIRED)
+
+target_link_libraries(your_target PRIVATE qlucidcamera::qlucidcamera)
+```
+
+If `qlucidcamera` is installed in a non-system prefix, configure with one of:
+
+```bash
+cmake -S . -B build -DCMAKE_PREFIX_PATH=/path/to/prefix
+# or
+cmake -S . -B build -Dqlucidcamera_DIR=/path/to/prefix/lib/cmake/qlucidcamera
+```
+
+### Arena SDK note for consumers
+
+- Arena SDK is an internal dependency of `qlucidcamera`.
+- Consumer configure-time dependency resolution does not require `find_package(ArenaSDK)`.
+- At runtime, the Arena shared libraries still need to be discoverable by the dynamic loader.
+
 ## Output
 
 Debug preset output example:

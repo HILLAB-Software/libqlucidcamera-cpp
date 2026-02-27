@@ -21,11 +21,127 @@
 #define LUCID_CAM_BUFFER_SIZE 20
 
 #include "lucid_camera.h"
+#include <ArenaApi.h>
 #include <GenApi/Filestream.h>
 #include <SaveApi.h>
 #include <QDebug>
 
 namespace qlucidcamera {
+
+template <typename T>
+T LucidCamera::__GetNodeValue(const std::string& name) {
+  try {
+    if (!GetIsValid()) return 0;
+    if (device_ == nullptr)
+      throw std::runtime_error(
+        "GetNodeValue " + name + " failed: Camera is not specified.");
+    if (!device_->IsConnected()) {
+      qCritical() << "Camera GetNodeValue '" << name.c_str() << "' failed: Device connection lost";
+      emit deviceLostExceptionThrown("");
+      return 0;
+    }
+    return Arena::GetNodeValue<T>(device_->GetNodeMap(), name.c_str());
+  }
+  catch (const std::exception& e) {
+    qCritical() << e.what();
+    return 0;
+  }
+  catch (GenICam::GenericException& e) {
+    qCritical() << e.what();
+    return 0;
+  }
+}
+
+template <typename T>
+T LucidCamera::__GetNodeMax(const std::string& name) {
+  try {
+    if (!GetIsValid()) return 0;
+    if (device_ == nullptr)
+      throw std::runtime_error(
+        "GetNodeMax " + name + " failed: Camera is not specified.");
+    if (!device_->IsConnected()) {
+      qCritical() << "Camera GetNodeMax '" << name.c_str() << "' failed: Device connection lost";
+      emit deviceLostExceptionThrown("");
+      return 0;
+    }
+    return Arena::GetNodeMax<T>(device_->GetNodeMap(), name.c_str());
+  }
+  catch (const std::exception& e) {
+    qCritical() << e.what();
+    return 0;
+  }
+  catch (GenICam::GenericException& e) {
+    qCritical() << e.what();
+    return 0;
+  }
+}
+
+template <typename T>
+T LucidCamera::__GetNodeMin(const std::string& name) {
+  try {
+    if (!GetIsValid()) return 0;
+    if (device_ == nullptr)
+      throw std::runtime_error(
+        "GetNodeMin " + name + " failed: Camera is not specified.");
+    if (!device_->IsConnected()) {
+      qCritical() << "Camera GetNodeMin '" << name.c_str() << "' failed: Device connection lost";
+      emit deviceLostExceptionThrown("");
+      return 0;
+    }
+    return Arena::GetNodeMin<T>(device_->GetNodeMap(), name.c_str());
+  }
+  catch (const std::exception& e) {
+    qCritical() << e.what();
+    return 0;
+  }
+  catch (GenICam::GenericException& e) {
+    qCritical() << e.what();
+    return 0;
+  }
+}
+
+template <typename T>
+void LucidCamera::__SetNodeValue(const std::string& name, const T& value) {
+  try {
+    if (!GetIsValid()) return;
+    if (device_ == nullptr)
+      throw std::runtime_error(
+        "SetNodeValue " + name + " failed: Camera is not specified.");
+    if (!device_->IsConnected()) {
+      qCritical() << "Camera SetNodeValue '" << name.c_str() << "' failed: Device connection lost";
+      emit deviceLostExceptionThrown("");
+      return;
+    }
+    return Arena::SetNodeValue<T>(device_->GetNodeMap(), name.c_str(), value);
+  }
+  catch (const std::exception& e) {
+    qCritical() << e.what();
+  }
+  catch (GenICam::GenericException& e) {
+    qCritical() << e.what();
+  }
+}
+
+void LucidCamera::__ExecuteNode(const std::string& name) {
+  try {
+    if (!GetIsValid()) return;
+    if (device_ == nullptr)
+      throw std::runtime_error(
+        "ExecuteNode " + name + " failed: Camera is not specified.");
+    if (!device_->IsConnected()) {
+      qCritical() << "Camera ExecuteNode '" << name.c_str() << "' failed: Device connection lost";
+      emit deviceLostExceptionThrown("");
+      return;
+    }
+    Arena::ExecuteNode(device_->GetNodeMap(), name.c_str());
+  }
+  catch (const std::exception& e) {
+    qCritical() << e.what();
+  }
+  catch (GenICam::GenericException& e) {
+    qCritical() << e.what();
+  }
+}
 
 /// 이 객체가 지워지기 전, device_ 를 받아온 뒤 상위에서 Arena::ISystem::DestroyDevice 호출로 제거해야 함.
 LucidCamera::LucidCamera(QObject* parent)

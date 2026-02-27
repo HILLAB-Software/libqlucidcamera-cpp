@@ -28,7 +28,9 @@
 #include <string>
 #include <queue>
 
-#include <ArenaApi.h>
+namespace Arena {
+class IDevice;
+}
 
 namespace qlucidcamera {
 
@@ -239,119 +241,18 @@ private:
   void run() override;
 
   template <typename T>
-  T __GetNodeValue(const std::string& name) {
-  try {
-    if (!GetIsValid()) return 0;
-    if (device_ == nullptr)
-    throw std::runtime_error(
-      "GetNodeValue " + name + " failed: Camera is not specified.");
-    if (!device_->IsConnected()) {
-    qCritical() << "Camera GetNodeValue '" << name.c_str() << "' failed: Device connection lost";
-    emit deviceLostExceptionThrown("");
-    return 0;
-    }
-    return Arena::GetNodeValue<T>(device_->GetNodeMap(), name.c_str());
-  }
-  catch (const std::exception& e) {
-    qCritical() << e.what();
-    return 0;
-  }
-  catch (GenICam::GenericException& e) {
-    qCritical() << e.what();
-    return 0;
-  }
-  }
+  T __GetNodeValue(const std::string& name);
 
   template <typename T>
-  T __GetNodeMax(const std::string& name) {
-  try {
-    if (!GetIsValid()) return 0;
-    if (device_ == nullptr)
-    throw std::runtime_error(
-      "GetNodeMax " + name + " failed: Camera is not specified.");
-    if (!device_->IsConnected()) {
-    qCritical() << "Camera GetNodeMax '" << name.c_str() << "' failed: Device connection lost";
-    emit deviceLostExceptionThrown("");
-    return 0;
-    }
-    return Arena::GetNodeMax<T>(device_->GetNodeMap(), name.c_str());
-  }
-  catch (const std::exception& e) {
-    qCritical() << e.what();
-    return 0;
-  }
-  catch (GenICam::GenericException& e) {
-    qCritical() << e.what();
-    return 0;
-  }
-  }
+  T __GetNodeMax(const std::string& name);
 
   template <typename T>
-  T __GetNodeMin(const std::string& name) {
-  try {
-    if (!GetIsValid()) return 0;
-    if (device_ == nullptr)
-    throw std::runtime_error(
-      "GetNodeMin " + name + " failed: Camera is not specified.");
-    if (!device_->IsConnected()) {
-    qCritical() << "Camera GetNodeMin '" << name.c_str() << "' failed: Device connection lost";
-    emit deviceLostExceptionThrown("");
-    return 0;
-    }
-    return Arena::GetNodeMin<T>(device_->GetNodeMap(), name.c_str());
-  }
-  catch (const std::exception& e) {
-    qCritical() << e.what();
-    return 0;
-  }
-  catch (GenICam::GenericException& e) {
-    qCritical() << e.what();
-    return 0;
-  }
-  }
+  T __GetNodeMin(const std::string& name);
 
   template <typename T>
-  void __SetNodeValue(const std::string& name, const T& value) {
-  try {
-    if (!GetIsValid()) return;
-    if (device_ == nullptr)
-    throw std::runtime_error(
-      "SetNodeValue " + name + " failed: Camera is not specified.");
-    if (!device_->IsConnected()) {
-    qCritical() << "Camera SetNodeValue '" << name.c_str() << "' failed: Device connection lost";
-    emit deviceLostExceptionThrown("");
-    return;
-    }
-    return Arena::SetNodeValue<T>(device_->GetNodeMap(), name.c_str(), value);
-  }
-  catch (const std::exception& e) {
-    qCritical() << e.what();
-  }
-  catch (GenICam::GenericException& e) {
-    qCritical() << e.what();
-  }
-  }
+  void __SetNodeValue(const std::string& name, const T& value);
 
-  void __ExecuteNode(const std::string& name) {
-  try {
-    if (!GetIsValid()) return;
-    if (device_ == nullptr)
-    throw std::runtime_error(
-      "ExecuteNode " + name + " failed: Camera is not specified.");
-    if (!device_->IsConnected()) {
-    qCritical() << "Camera ExecuteNode '" << name.c_str() << "' failed: Device connection lost";
-    emit deviceLostExceptionThrown("");
-    return;
-    }
-    Arena::ExecuteNode(device_->GetNodeMap(), name.c_str());
-  }
-  catch (const std::exception& e) {
-    qCritical() << e.what();
-  }
-  catch (GenICam::GenericException& e) {
-    qCritical() << e.what();
-  }
-  }
+  void __ExecuteNode(const std::string& name);
 
 
   //catch (GenICam::GenericException& ge) {

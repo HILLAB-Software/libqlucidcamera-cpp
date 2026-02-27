@@ -35,6 +35,12 @@
 #define LUCID_CAMERA std::shared_ptr<LucidCamera>
 #define CREATE_LUCID_CAMERA std::make_shared<LucidCamera>()
 
+namespace Arena {
+class IDevice;
+class ISystem;
+class DeviceInfo;
+}
+
 namespace qlucidcamera {
 
 class LucidCameraInfo {

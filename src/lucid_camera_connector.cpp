@@ -19,6 +19,7 @@
  */
 
 #include "lucid_camera_connector.h"
+#include <ArenaApi.h>
 #include <QtQml/qqml.h>
 #include <QtConcurrent/QtConcurrent>
 

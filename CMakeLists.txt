@@ -117,15 +117,15 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(TARGET Arena::ArenaSDK)
-  target_link_libraries(${PROJECT_NAME} PUBLIC Arena::ArenaSDK)
+  target_link_libraries(${PROJECT_NAME} PRIVATE Arena::ArenaSDK)
 elseif(TARGET ArenaSDK::ArenaSDK)
-  target_link_libraries(${PROJECT_NAME} PUBLIC ArenaSDK::ArenaSDK)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ArenaSDK::ArenaSDK)
 elseif(TARGET Arena::Arena)
-  target_link_libraries(${PROJECT_NAME} PUBLIC Arena::Arena)
+  target_link_libraries(${PROJECT_NAME} PRIVATE Arena::Arena)
 elseif(TARGET ArenaSDK::Arena)
-  target_link_libraries(${PROJECT_NAME} PUBLIC ArenaSDK::Arena)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ArenaSDK::Arena)
 elseif(TARGET qlucidcamera_arena_sdk)
-  target_link_libraries(${PROJECT_NAME} PUBLIC qlucidcamera_arena_sdk)
+  target_link_libraries(${PROJECT_NAME} PRIVATE qlucidcamera_arena_sdk)
 endif()
 
 if(WIN32)
@@ -148,12 +148,6 @@ install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-
-if(TARGET qlucidcamera_arena_sdk)
-  install(TARGETS qlucidcamera_arena_sdk
-    EXPORT ${PROJECT_NAME}Targets
-  )
-endif()
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/qlucidcamera
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
