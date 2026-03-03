@@ -1,6 +1,6 @@
 # libqlucidcamera-cpp
 
-`libqlucidcamera-cpp` is a C++ library for controlling and streaming from LUCID cameras.
+`libqlucidcamera-cpp` is a C++ library for controlling and streaming from [LUCID Vision Labs](https://thinklucid.com/) cameras.
 It provides camera discovery/connection, runtime control for acquisition parameters, and frame delivery via Qt signals.
 
 ## Features
