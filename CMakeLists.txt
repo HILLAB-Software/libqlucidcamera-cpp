@@ -28,8 +28,10 @@ if(NOT ArenaSDK_FOUND AND NOT Arena_FOUND)
     find_path(ARENA_API_HEADER_DIR
       NAMES ArenaApi.h
       HINTS
+        $ENV{LUCID_DEV_ROOT}
         $ENV{ARENA_SDK_ROOT}
         $ENV{ARENA_SDK_DIR}
+        "C:/Program Files/Lucid Vision Labs/Arena SDK"
         /opt/ArenaSDK
         /usr/local/ArenaSDK
         /home/dev/ArenaViewMP_v_1.0.0.10_Linux_x64/ArenaSDK_Linux_x64
@@ -44,35 +46,97 @@ if(NOT ArenaSDK_FOUND AND NOT Arena_FOUND)
   endif()
 
   if(ARENA_SDK_ROOT)
-    find_library(ARENA_LIBRARY
-      NAMES arena
-      PATHS
-        ${ARENA_SDK_ROOT}/lib64
-        ${ARENA_SDK_ROOT}/lib
-      NO_DEFAULT_PATH
-    )
-    find_library(SAVE_LIBRARY
-      NAMES save
-      PATHS
-        ${ARENA_SDK_ROOT}/lib64
-        ${ARENA_SDK_ROOT}/lib
-      NO_DEFAULT_PATH
-    )
-
-    if(ARENA_LIBRARY AND SAVE_LIBRARY)
-      add_library(qlucidcamera_arena_sdk INTERFACE)
-      target_include_directories(qlucidcamera_arena_sdk INTERFACE
-        ${ARENA_SDK_ROOT}/include
-        ${ARENA_SDK_ROOT}/include/Arena
-        ${ARENA_SDK_ROOT}/include/Save
-        ${ARENA_SDK_ROOT}/GenICam/library/CPP/include
+    if(WIN32)
+      # Windows uses versioned lib names and a sub-directory under lib64/
+      find_library(ARENA_LIBRARY_RELEASE
+        NAMES Arena_v140
+        PATHS
+          "${ARENA_SDK_ROOT}/lib64/Arena"
+          "${ARENA_SDK_ROOT}/lib/Arena"
+        NO_DEFAULT_PATH
       )
-      target_link_libraries(qlucidcamera_arena_sdk INTERFACE
-        ${ARENA_LIBRARY}
-        ${SAVE_LIBRARY}
+      find_library(ARENA_LIBRARY_DEBUG
+        NAMES Arenad_v140
+        PATHS
+          "${ARENA_SDK_ROOT}/lib64/Arena"
+          "${ARENA_SDK_ROOT}/lib/Arena"
+        NO_DEFAULT_PATH
+      )
+      find_library(SAVE_LIBRARY_RELEASE
+        NAMES Save_v140
+        PATHS
+          "${ARENA_SDK_ROOT}/lib64/Arena"
+          "${ARENA_SDK_ROOT}/lib/Arena"
+        NO_DEFAULT_PATH
+      )
+      find_library(SAVE_LIBRARY_DEBUG
+        NAMES Saved_v140
+        PATHS
+          "${ARENA_SDK_ROOT}/lib64/Arena"
+          "${ARENA_SDK_ROOT}/lib/Arena"
+        NO_DEFAULT_PATH
       )
 
-      if(UNIX AND NOT APPLE)
+      if(ARENA_LIBRARY_RELEASE AND SAVE_LIBRARY_RELEASE)
+        # Fall back to release libs when debug variants are absent
+        if(NOT ARENA_LIBRARY_DEBUG)
+          set(ARENA_LIBRARY_DEBUG "${ARENA_LIBRARY_RELEASE}")
+        endif()
+        if(NOT SAVE_LIBRARY_DEBUG)
+          set(SAVE_LIBRARY_DEBUG "${SAVE_LIBRARY_RELEASE}")
+        endif()
+
+        add_library(qlucidcamera_arena_sdk INTERFACE)
+        target_include_directories(qlucidcamera_arena_sdk INTERFACE
+          "${ARENA_SDK_ROOT}/include"
+          "${ARENA_SDK_ROOT}/include/Arena"
+          "${ARENA_SDK_ROOT}/include/Save"
+          "${ARENA_SDK_ROOT}/GenICam/library/CPP/include"
+        )
+        if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+          target_link_directories(qlucidcamera_arena_sdk INTERFACE
+            "${ARENA_SDK_ROOT}/GenICam/library/CPP/lib/Win64_x64"
+          )
+        else()
+          target_link_directories(qlucidcamera_arena_sdk INTERFACE
+            "${ARENA_SDK_ROOT}/GenICam/library/CPP/lib/Win32_i86"
+          )
+        endif()
+        target_link_libraries(qlucidcamera_arena_sdk INTERFACE
+          optimized "${ARENA_LIBRARY_RELEASE}"
+          debug     "${ARENA_LIBRARY_DEBUG}"
+          optimized "${SAVE_LIBRARY_RELEASE}"
+          debug     "${SAVE_LIBRARY_DEBUG}"
+        )
+      endif()
+    else()
+      find_library(ARENA_LIBRARY
+        NAMES arena
+        PATHS
+          ${ARENA_SDK_ROOT}/lib64
+          ${ARENA_SDK_ROOT}/lib
+        NO_DEFAULT_PATH
+      )
+      find_library(SAVE_LIBRARY
+        NAMES save
+        PATHS
+          ${ARENA_SDK_ROOT}/lib64
+          ${ARENA_SDK_ROOT}/lib
+        NO_DEFAULT_PATH
+      )
+
+      if(ARENA_LIBRARY AND SAVE_LIBRARY)
+        add_library(qlucidcamera_arena_sdk INTERFACE)
+        target_include_directories(qlucidcamera_arena_sdk INTERFACE
+          ${ARENA_SDK_ROOT}/include
+          ${ARENA_SDK_ROOT}/include/Arena
+          ${ARENA_SDK_ROOT}/include/Save
+          ${ARENA_SDK_ROOT}/GenICam/library/CPP/include
+        )
+        target_link_libraries(qlucidcamera_arena_sdk INTERFACE
+          ${ARENA_LIBRARY}
+          ${SAVE_LIBRARY}
+        )
         target_link_directories(qlucidcamera_arena_sdk INTERFACE
           ${ARENA_SDK_ROOT}/lib64
           ${ARENA_SDK_ROOT}/lib

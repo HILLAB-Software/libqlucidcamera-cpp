@@ -405,7 +405,7 @@ QString LucidCamera::GetMacAddress() {
     "GevMACAddress"));
 }
 
-QString LucidCamera::GetUserName() {
+QString LucidCamera::GetUserDefinedName() {
   return __GetNodeValue<GenICam::gcstring>(
     "DeviceUserID").c_str();
 }
@@ -951,7 +951,7 @@ void LucidCamera::SetIsValid(bool valid) {
   emit triggerModeChanged(is_trigger_mode_);
   emit triggerSourceChanged(GetTriggerSource());
   emit triggerActivationChanged(GetTriggerActivation());
-  emit userNameChanged(GetUserName());
+  emit userNameChanged(GetUserDefinedName());
   emit physicalPixelSizeChanged(GetPhysicalPixelSize());
 
   emit connectedChanged(valid);
@@ -1217,7 +1217,7 @@ void LucidCamera::run() {
       device_->GetTLStreamNodeMap(),
       "StreamAutoNegotiatePacketSize");
   
-  QString msg = "\n[Start Stream - " + GetUserName() + "]" +
+  QString msg = "\n[Start Stream - " + GetUserDefinedName() + "]" +
     " \n PTP enable=" + (ptp_enabled ? "true" : "false") +
     " \n PTP status=" + QString::fromStdString(ptp_status) +
     " \n Acquisition start mode=" + QString::number(acquisition_start_mode) +

@@ -58,6 +58,50 @@ cmake --preset qt-env-debug
 cmake --build --preset build-qt-env-debug
 ```
 
+### Windows (PowerShell script)
+
+From the project root in PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build_windows.ps1
+```
+
+Default behavior builds both Debug and Release in sequence.
+
+Build only one configuration:
+
+```powershell
+# Debug only
+powershell -ExecutionPolicy Bypass -File .\build_windows.ps1 -Configuration Debug
+
+# Release only
+powershell -ExecutionPolicy Bypass -File .\build_windows.ps1 -Configuration Release
+```
+
+Optional parallel jobs:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build_windows.ps1 -Jobs 8
+```
+
+The script auto-detects Arena SDK and sets related environment variables.
+If needed, set the SDK path manually before running:
+
+```powershell
+$env:ARENA_SDK_DIR = 'C:\Program Files\Lucid Vision Labs\Arena SDK'
+```
+
+If OpenCV is not auto-detected, set it manually:
+
+```powershell
+$env:OpenCV_DIR = 'C:\opencv\build'
+```
+
+The script uses these CMake presets:
+
+- `win-qt-env-debug` / `build-win-qt-env-debug`
+- `win-qt-env-release` / `build-win-qt-env-release`
+
 ### Generic CMake build
 
 ```bash

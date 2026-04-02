@@ -16,6 +16,14 @@
     }
   },
   {
+    "name": "windows-base",
+    "hidden": true,
+    "binaryDir": "${sourceDir}/build/${presetName}",
+    "cacheVariables": {
+      "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+    }
+  },
+  {
     "name": "qt610-debug",
     "displayName": "Qt 6.10.2 Debug",
     "description": "Use preset-local QT_ROOT for Qt 6.10.2",
@@ -60,6 +68,30 @@
     "CMAKE_BUILD_TYPE": "Release",
     "CMAKE_PREFIX_PATH": "$env{QT_ROOT}/lib/cmake"
     }
+  }, 
+  {
+    "name": "win-qt-env-debug",
+    "displayName": "Windows Qt Env Debug",
+    "description": "Windows: Use QT_ROOT and LIBS_ROOT from environment (Visual Studio 2022)",
+    "inherits": "windows-base",
+    "generator": "Visual Studio 17 2022",
+    "cacheVariables": {
+      "CMAKE_BUILD_TYPE": "Debug",
+      "CMAKE_TOOLCHAIN_FILE": "C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake", 
+      "OpenCV_DIR": "C:/opencv/build"
+    }
+  },
+  {
+    "name": "win-qt-env-release",
+    "displayName": "Windows Qt Env Release",
+    "description": "Windows: Use QT_ROOT and LIBS_ROOT from environment (Visual Studio 2022)",
+    "inherits": "windows-base",
+    "generator": "Visual Studio 17 2022",
+    "cacheVariables": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_TOOLCHAIN_FILE": "C:/Qt/6.8.3/msvc2022_64/lib/cmake/Qt6/qt.toolchain.cmake", 
+      "OpenCV_DIR": "C:/opencv/build"
+    }
   }
   ],
   "buildPresets": [
@@ -78,6 +110,16 @@
   {
     "name": "build-qt-env-release",
     "configurePreset": "qt-env-release"
+  },
+  {
+    "name": "build-win-qt-env-debug",
+    "configurePreset": "win-qt-env-debug",
+    "configuration": "Debug"
+  },
+  {
+    "name": "build-win-qt-env-release",
+    "configurePreset": "win-qt-env-release",
+    "configuration": "Release"
   }
   ]
 }

@@ -248,7 +248,7 @@ bool LucidCameraConnector::DisconnectDevice(LucidCamera* device) {
   for (int i = 0; i < devices_.size(); i++) {
   Arena::IDevice* c = devices_[i];
   if (c != nullptr && c == device->GetDevice()) {
-    removed_device_info.alias_ = device->GetUserName();
+    removed_device_info.alias_ = device->GetUserDefinedName();
     removed_device_info.model_name_ = device->GetModelName();
     removed_device_info.serial_number_ = device->GetSerialNumber();
     if (device->isRunning()) {

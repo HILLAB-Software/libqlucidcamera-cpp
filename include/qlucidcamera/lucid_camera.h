@@ -38,7 +38,7 @@ class LucidCamera : public QThread {
   Q_OBJECT
 
   Q_PROPERTY(bool connected READ GetIsValid WRITE SetIsValid NOTIFY connectedChanged)
-  Q_PROPERTY(QString userName READ GetUserName WRITE SetUserName NOTIFY userNameChanged)
+  Q_PROPERTY(QString userName READ GetUserDefinedName WRITE SetUserName NOTIFY userNameChanged)
   Q_PROPERTY(QString serialNumber READ GetSerialNumber NOTIFY connectedChanged)
   Q_PROPERTY(QString modelName READ GetModelName NOTIFY connectedChanged)
   Q_PROPERTY(double exposure READ GetExposure WRITE SetExposure NOTIFY exposureChanged)
@@ -163,7 +163,7 @@ public Q_SLOTS:
   QString GetModelName();
   QString GetSerialNumber();
   QString GetMacAddress();
-  QString GetUserName();
+  QString GetUserDefinedName();
   double GetMaxExposure();
   double GetMinExposure();
   double GetMaxGain();
